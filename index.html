@@ -33,3 +33,24 @@
         </p>
     </body>
 </html>
+:root {
+  --color-text: green;
+  --color-background: black;
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --color-text: green;
+    --color-background: black;
+  }
+}
+
+/*
+  But keep in mind that Dark Mode is not just changing black to white 
+  but handling the contrast. This was just an example.
+  You can also use "light".
+*/
+@media screen and (prefers-color-scheme: light) {
+  :root {
+    --color-text: green;
+    --color-background: black;
