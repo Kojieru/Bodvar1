@@ -20,13 +20,12 @@
             overflow: hidden;
         }
 
-        /* Background ASCII effect */
+        /* Background text effect */
         body::before {
-            content: '\n           ______\n        .-"      "-.\n       /            \\\n      |              |\n      |,  .-.  .-.  ,|\n      | )(__/  \\__)( |\n      |/     /\\     \\|\n      (_     ^^     _)\n       \\__|IIIIII|__/\n        | \\IIIIII/ |\n        \\          /\n  Bod    `--------`\n';
-            color: #00FF00; /* Ensure ASCII art is green */
-            font-size: 0.8rem; /* Adjust size for visual effect */
-            line-height: 1.5rem; /* Proper spacing between lines */
-            white-space: pre;
+            content: "@Bodvvarr@ ";
+            color: #00FF00; /* Ensure background text is green */
+            font-size: 1.5rem; /* Adjust size for visual effect */
+            line-height: 2rem; /* Proper spacing between lines */
             opacity: 0.1; /* Make the background less intense */
             position: absolute;
             top: 0;
@@ -35,6 +34,10 @@
             height: 100%;
             z-index: -1; /* Push it to the background */
             overflow: hidden;
+            white-space: pre-wrap;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
         }
 
         .content {
