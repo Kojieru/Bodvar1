@@ -55,11 +55,13 @@ if (isset($_GET['logout'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bodvar's Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #2C2F3D; /* Phantom Black */
-            color: #00FF00; /* Green text */
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #D0FF00; /* Light green text */
             margin: 0;
             padding: 0;
             display: flex;
@@ -67,76 +69,132 @@ if (isset($_GET['logout'])) {
             align-items: center;
             height: 100vh;
             text-align: center;
+            overflow: hidden;
         }
-        h1 {
-            color: #FF0000; /* Red color for headings */
+
+        h1, h2 {
+            color: #FF5733; /* Warm Red color for headings */
+            font-weight: 700;
+            letter-spacing: 1px;
         }
+
         .container {
-            background-color: #111; /* Dark background */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #1F1F1F; /* Dark container */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
         }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 30px;
+        }
+
+        /* Form Styles */
         form {
-            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
+
         input, textarea {
-            width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 1rem;
-            margin-bottom: 10px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            background-color: #333;
-            color: #00FF00;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #2C2C2C;
+            color: #D0FF00;
+            transition: border-color 0.3s ease-in-out;
         }
+
+        input:focus, textarea:focus {
+            border-color: #FF5733; /* Highlight input fields with red */
+            outline: none;
+        }
+
         button {
-            padding: 10px 20px;
-            background-color: #f8a5c2;
+            padding: 15px;
+            font-size: 1rem;
+            background-color: #FF5733;
             color: white;
             border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #f07d96;
-        }
-        pre {
-            background-color: #111;
-            color: #00FF00;
-            padding: 20px;
             border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #C7442B; /* Darken button on hover */
+        }
+
+        /* Message Display */
+        pre {
+            background-color: #2C2C2C;
+            color: #D0FF00;
+            padding: 25px;
+            border-radius: 8px;
+            font-size: 1rem;
             white-space: pre-wrap;
             word-wrap: break-word;
             max-width: 800px;
             margin: 20px auto;
         }
+
+        /* Admin Login Form */
         .admin-login {
             margin-top: 20px;
         }
+
         .admin-login input {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
         .admin-login button {
             width: 100%;
         }
+
+        /* Admin Actions */
         .admin-actions {
             margin-top: 20px;
         }
+
         .admin-actions a {
-            color: #f8a5c2;
+            color: #FF5733;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
         }
+
         .admin-actions a:hover {
-            color: #f07d96;
+            color: #C7442B;
         }
+
+        /* Error and Confirmation Messages */
         .error-message {
-            color: red;
+            color: #FF5733; /* Error messages in red */
             font-weight: bold;
+        }
+
+        .confirmation-message {
+            color: #32CD32; /* Green confirmation messages */
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input, textarea, button {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -144,55 +202,61 @@ if (isset($_GET['logout'])) {
 
 <div class="container">
 
-    <h1>About Me</h1>
-    <p><span style="color: #FF0000;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime.</p>
+    <!-- About Me Section -->
+    <section>
+        <h1>About Me</h1>
+        <p><span style="color: #FF5733;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime. 😊</p>
+    </section>
 
-    <!-- Show confirmation message if message was successfully submitted -->
-    <?php if (isset($confirmation_message)) echo "<p>$confirmation_message</p>"; ?>
-
-    <!-- Show error if form submission failed (e.g., invalid email) -->
+    <!-- Success or Error Messages -->
+    <?php if (isset($confirmation_message)) echo "<p class='confirmation-message'>$confirmation_message</p>"; ?>
     <?php if (isset($form_error)) echo "<p class='error-message'>$form_error</p>"; ?>
 
     <!-- Message Form -->
-    <h2>Leave a Message</h2>
-    <form method="POST" action="">
-        <input type="text" name="name" placeholder="Your Name" required>
-        <input type="email" name="email" placeholder="Your Email" required>
-        <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-        <button type="submit">Send Message</button>
-    </form>
+    <section>
+        <h2>Leave a Message</h2>
+        <form method="POST" action="">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
 
     <!-- Admin Panel for Viewing Messages -->
     <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
-        <h2>Admin - View Messages</h2>
+        <section>
+            <h2>Admin - View Messages</h2>
 
-        <?php
-        // Path to the messages file
-        $file = "messages.txt";
+            <?php
+            // Path to the messages file
+            $file = "messages.txt";
 
-        // Check if the file exists and read the content
-        if (file_exists($file)) {
-            $messages = file_get_contents($file);
-        } else {
-            $messages = "No messages yet.";
-        }
-        echo '<pre>' . htmlspecialchars($messages) . '</pre>';
-        ?>
+            // Check if the file exists and read the content
+            if (file_exists($file)) {
+                $messages = file_get_contents($file);
+            } else {
+                $messages = "No messages yet.";
+            }
+            echo '<pre>' . htmlspecialchars($messages) . '</pre>';
+            ?>
 
-        <div class="admin-actions">
-            <a href="?logout=true">Log out</a>
-        </div>
+            <div class="admin-actions">
+                <a href="?logout=true">Log out</a>
+            </div>
+        </section>
 
     <?php else: ?>
 
         <!-- Admin Login -->
-        <div class="admin-login">
+        <section class="admin-login">
+            <h2>Admin Login</h2>
             <form method="POST" action="">
                 <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
                 <button type="submit">Login</button>
             </form>
             <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
-        </div>
+        </section>
 
     <?php endif; ?>
 
