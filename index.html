@@ -17,81 +17,46 @@
             margin: 0;
             text-align: center;
             flex-direction: column; /* Stack elements vertically */
+            overflow: hidden;
+        }
+
+        /* Background ASCII effect */
+        body::before {
+            content: '\n           ______\n        .-"      "-.\n       /            \\\n      |              |\n      |,  .-.  .-.  ,|\n      | )(__/  \\__)( |\n      |/     /\\     \\|\n      (_     ^^     _)\n       \\__|IIIIII|__/\n        | \\IIIIII/ |\n        \\          /\n  Bod    `--------`\n';
+            color: #00FF00; /* Ensure ASCII art is green */
+            font-size: 0.8rem; /* Adjust size for visual effect */
+            line-height: 1.5rem; /* Proper spacing between lines */
+            white-space: pre;
+            opacity: 0.1; /* Make the background less intense */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Push it to the background */
+            overflow: hidden;
         }
 
         .content {
+            z-index: 1; /* Ensure content is above the background */
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
 
-        .about-me {
-            margin-bottom: 1rem; /* Add spacing between text and ASCII art */
-            width: 100%; /* Ensure it stretches across the page */
-        }
-
-        pre {
-            margin: 0 auto; /* Center the ASCII art */
-            color: #00FF00; /* Ensure ASCII art is green */
-            text-align: center; /* Ensure ASCII stays centered */
-        }
-
         .arabic-text {
             margin-top: 1rem; /* Add spacing above the Arabic text */
+        }
+
+        .about-me {
+            margin-top: 1rem; /* Add spacing above "About Me" */
+            color: #00FF00;
         }
     </style>
 </head>
 <body>
     <div class="content">
-        <!-- "About Me" Text -->
-        <p class="about-me">I'm Bodvar, a friendly human, come and talk with me</p>
-
-        <!-- Updated and Centered ASCII Art -->
-        <pre>
-                            .xm*f""??T?@hc.
-                          z@"` '~((!!!!!!!?*m.
-                        z$$$K   ~~(/!!!!!!!!!Mh
-                      .f` "#$k'`~~\!!!!!!!!!!!MMc
-                     :"     f*! ~:~(!!!!!!!!!!XHMk
-                     f      " %n:~(!!!!!!!!!!!HMMM.
-                    d          X~!~(!!!!!!!X!X!SMMR
-                    M :   x::  :~~!>!!!!!!MNWXMMM@R
- n                  E ' *  ueeeeiu(!!XUWWWWWXMRHMMM>                :.
- E%                 E  8 .$$$$$$$$K!!$$$$$$$$&M$RMM>               :"5
-z  %                3  $ 4$$$$$$$$!~!*$$$$$$$$!$MM$               :" `
-K   ":              ?> # '#$$$$$#~!!!!TR$$$$$R?@MME              z   R
-?     %.             5     ^"""~~~:XW!!!!T?T!XSMMM~            :^    J
- ".    ^s             ?.       ~~d$X$NX!!!!!!M!MM             f     :~
-  '+.    #L            *c:.    .~"?!??!!!!!XX@M@~           z"    .*
-    '+     %L           #c`"!+~~~!/!!!!!!@*TM8M           z"    .~
-      ":    '%.         'C*X  .!~!~!!!!!X!!!@RF         .#     +
-        ":    ^%.        9-MX!X!!X~H!!M!N!X$MM        .#`    +"
-          #:    "n       'L'!~M~)H!M!XX!$!XMXF      .+`   .z"
-            #:    ":      R *H$@@$H$*@$@$@$%M~     z`    +"
-              %:   `*L    'k' M!~M~X!!$!@H!tF    z"    z"
-                *:   ^*L   "k ~~~!~!!!!!M!X*   z*   .+"
-                  "s   ^*L  '%:.~~~:!!!!XH"  z#   .*"
-                    #s   ^%L  ^"#4@UU@##"  z#   .*"
-                      #s   ^%L           z#   .r"
-                        #s   ^%.       u#   .r"
-                          #i   '%.   u#   .@"
-                            #s   ^%u#   .@"
-                              #s x#   .*"
-                               x#`  .@%.
-                             x#`  .d"  "%.
-                           xf~  .r" #s   "%.
-                     u   x*`  .r"     #s   "%.  x.
-                     %Mu*`  x*"         #m.  "%zX"
-                     :R(h x*              "h..*dN.
-                   u@NM5e#>                 7?dMRMh.
-                 z$@M@$#"#"                 *""*@MM$hL
-               u@@MM8*                          "*$M@Mh.
-             z$RRM8F"                             "N8@M$bL
-            5`RM$#                                  'R88f)R
-            'h.$"                                     #$x*
-        </pre>
-
         <!-- Arabic Text -->
         <p class="arabic-text">
             إذا أبصرت قبرا من بعيد<br>
@@ -99,6 +64,9 @@ K   ":              ?> # '#$$$$$#~!!!!TR$$$$$R?@MME              z   R
             ألا رحم المهيمن نفس حر<br>
             تصدق بالوفاة على أخيه
         </p>
+
+        <!-- "About Me" Text -->
+        <p class="about-me">I'm Bodvar, a friendly human, come and talk with me</p>
     </div>
 </body>
 </html>
