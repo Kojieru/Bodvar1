@@ -153,3 +153,110 @@ if (isset($_GET['logout'])) {
 </div>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodvar's Website</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #00FF00; /* Green text color */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            padding: 40px;
+            background-color: #1F1F1F;
+            border-radius: 10px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2C2C2C;
+            color: #00FF00;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Me</h1>
+        <form id="contact-form">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <p id="response-message" style="margin-top: 20px; color: #00FF00;"></p>
+    </div>
+
+    <!-- EmailJS Script -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS
+        emailjs.init("44e3fT6WiFS227oem"); // Your public key
+
+        // Handle Form Submission
+        document.getElementById("contact-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Collect form data
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const message = document.getElementById("message").value;
+
+            // Use EmailJS to send the email
+            emailjs.send("service_Bodvar", "template_4r00ffi", {
+                to_name: "Bodvar",
+                from_name: name,
+                from_email: email,
+                message: message
+            }).then(
+                function(response) {
+                    document.getElementById("response-message").textContent = "Message sent successfully!";
+                },
+                function(error) {
+                    document.getElementById("response-message").textContent = "Failed to send the message. Please try again.";
+                }
+            );
+
+            // Clear the form fields
+            document.getElementById("contact-form").reset();
+        });
+    </script>
+</body>
+</html>
