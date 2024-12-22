@@ -3,234 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodvar's Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
+    <title>Bodvar's Page</title>
     <style>
-        /* General Styles */
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #1C1C1C; /* Phantom Black background */
+            background-color: #000000; /* Ultra black background */
             color: #00FF00; /* Green text */
-            margin: 0;
-            padding: 0;
+            font-family: monospace;
+            font-size: 1.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             text-align: center;
-            overflow: hidden;
-        }
-
-        h1, h2 {
-            color: #00FF00; /* Green color for headings */
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .container {
-            background-color: #1C1C1C; /* Phantom Black container */
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            max-width: 800px;
-        }
-
-        /* Section Styling */
-        section {
-            margin-bottom: 30px;
-        }
-
-        /* Comment Form Styles */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        input, textarea {
-            padding: 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #2C2C2C;
-            color: #00FF00; /* Green text inside the form */
-            transition: border-color 0.3s ease-in-out;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #FF5733; /* Highlight input fields with red */
-            outline: none;
-        }
-
-        button {
-            padding: 15px;
-            font-size: 1rem;
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #C7442B; /* Darken button on hover */
-        }
-
-        /* Comment Display */
-        .comment {
-            background-color: #2C2C2C;
-            color: #00FF00; /* Green text for comments */
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .comment h3 {
-            color: #FF5733; /* Heading color for comment author */
-            font-size: 1.2rem;
-        }
-
-        /* Admin Login Form */
-        .admin-login {
-            margin-top: 20px;
-        }
-
-        .admin-login input {
-            margin-bottom: 15px;
-        }
-
-        .admin-login button {
-            width: 100%;
-        }
-
-        /* Admin Actions */
-        .admin-actions {
-            margin-top: 20px;
-        }
-
-        .admin-actions a {
-            color: #FF5733;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .admin-actions a:hover {
-            color: #C7442B;
-        }
-
-        /* Error and Confirmation Messages */
-        .error-message {
-            color: #FF5733; /* Error messages in red */
-            font-weight: bold;
-        }
-
-        .confirmation-message {
-            color: #32CD32; /* Green confirmation messages */
-            font-weight: bold;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            input, textarea, button {
-                font-size: 0.9rem;
-            }
+            white-space: pre-wrap;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <div>
+        <p>I'm Bodvar, a friendly human, come and talk with me</p>
 
-    <!-- About Me Section -->
-    <section>
-        <h1>About Me</h1>
-        <p><span style="color: #FF5733;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime. </p>
-    </section>
+        <!-- Much scarier ASCII skull -->
+        <pre>
+              _______
+            .-       -.
+           /           \
+          |  .--. .--.  |
+          |  |  | |  |  |
+          |  |  | |  |  |
+          |  '--' '--'  |
+          |   _______  |
+          |  |       |  |
+          |  |       |  |
+           \  '-----'  /
+            '-_______-'
 
-    <!-- Comment Section -->
-    <section>
-        <h2>Leave a Comment</h2>
-        <form method="POST" action="">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <textarea name="comment" rows="5" placeholder="Your Comment" required></textarea>
-            <button type="submit">Post Comment</button>
-        </form>
-    </section>
+        </pre>
+    </div>
 
-    <!-- Display Comments -->
-    <section>
-        <h2>Comments</h2>
-        <?php
-        // Path to the comments file
-        $file = "comments.txt";
-
-        // Check if the file exists and read the content
-        if (file_exists($file)) {
-            $comments = file_get_contents($file);
-            $comments = explode("\n---\n", $comments); // Split the comments based on separator
-
-            // Display each comment
-            foreach ($comments as $comment) {
-                if (!empty(trim($comment))) {
-                    echo '<div class="comment">' . nl2br(htmlspecialchars($comment)) . '</div>';
-                }
-            }
-        } else {
-            echo "<p>No comments yet.</p>";
-        }
-        ?>
-    </section>
-
-    <!-- Admin Panel for Viewing Messages -->
-    <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
-        <section>
-            <h2>Admin - View Messages</h2>
-
-            <?php
-            // Path to the messages file
-            $file = "messages.txt";
-
-            // Check if the file exists and read the content
-            if (file_exists($file)) {
-                $messages = file_get_contents($file);
-            } else {
-                $messages = "No messages yet.";
-            }
-            echo '<pre>' . htmlspecialchars($messages) . '</pre>';
-            ?>
-
-            <div class="admin-actions">
-                <a href="?logout=true">Log out</a>
-            </div>
-        </section>
-
-    <?php else: ?>
-
-        <!-- Admin Login -->
-        <section class="admin-login">
-            <h2>Admin Login</h2>
-            <form method="POST" action="">
-                <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
-        </section>
-
-    <?php endif; ?>
-
-</div>
+</body>
+</html>
 
 </body>
     <p>
