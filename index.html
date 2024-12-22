@@ -1,221 +1,122 @@
 <?php
-// Start the session for admin login
+// Start the session
 session_start();
 
-// Admin password
-$admin_password = "iluvcig"; // Set the admin password
+// Admin password (use hashing for production)
+$admin_password = "iluvcig";
 
-// Process the message form submission
+// Handle form submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['message'])) {
-    // Sanitize and validate form data
     $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $message = htmlspecialchars(trim($_POST['message']));
 
-    // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $form_error = "Invalid email format.";
     } else {
-        // Define the path to the message file
         $file = "messages.txt";
-
-        // Format the message content
         $message_content = "Name: $name\nEmail: $email\nMessage: $message\n\n---\n\n";
 
-        // Save the message to the file (ensure proper file permissions are set)
-        file_put_contents($file, $message_content, FILE_APPEND);
-
-        // Display a confirmation message after submission
-        $confirmation_message = "Thank you for your message! We will get back to you soon.";
+        if (file_put_contents($file, $message_content, FILE_APPEND)) {
+            $confirmation_message = "Thank you for your message! We will get back to you soon.";
+        } else {
+            $form_error = "Failed to save your message. Please try again later.";
+        }
     }
 }
 
-// Admin login handling
+// Admin login
 if (isset($_POST['admin_password'])) {
     if ($_POST['admin_password'] === $admin_password) {
         $_SESSION['admin_logged_in'] = true;
         header("Location: " . $_SERVER['PHP_SELF']);
         exit;
     } else {
-        $login_error = "Incorrect password. Please try again.";
+        $login_error = "Incorrect password.";
     }
 }
 
-// Admin log out
+// Admin logout
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bodvar's Website</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
     <style>
-        /* General Styles */
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #121212; /* Dark background */
-            color: #D0FF00; /* Light green text */
+            background-color: #000; /* Black background */
+            color: #00FF00; /* Green text */
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            overflow: hidden;
         }
-
         h1, h2 {
-            color: #FF5733; /* Warm Red color for headings */
-            font-weight: 700;
-            letter-spacing: 1px;
+            color: #00FF00; /* Green text for headers */
         }
-
         .container {
-            background-color: #1F1F1F; /* Dark container */
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            width: 100%;
+            padding: 20px;
             max-width: 800px;
+            margin: auto;
         }
-
-        /* Section Styling */
-        section {
-            margin-bottom: 30px;
-        }
-
-        /* Form Styles */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
         input, textarea {
-            padding: 15px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background-color: #2C2C2C;
-            color: #D0FF00;
-            transition: border-color 0.3s ease-in-out;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #FF5733; /* Highlight input fields with red */
-            outline: none;
-        }
-
-        button {
-            padding: 15px;
-            font-size: 1rem;
-            background-color: #FF5733;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        button:hover {
-            background-color: #C7442B; /* Darken button on hover */
-        }
-
-        /* Message Display */
-        pre {
-            background-color: #2C2C2C;
-            color: #D0FF00;
-            padding: 25px;
-            border-radius: 8px;
-            font-size: 1rem;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-
-        /* Admin Login Form */
-        .admin-login {
-            margin-top: 20px;
-        }
-
-        .admin-login input {
-            margin-bottom: 15px;
-        }
-
-        .admin-login button {
             width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #00FF00;
+            background-color: #000;
+            color: #00FF00;
+            border-radius: 5px;
         }
-
-        /* Admin Actions */
-        .admin-actions {
-            margin-top: 20px;
+        button {
+            background-color: red; /* Red buttons */
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
         }
-
-        .admin-actions a {
-            color: #FF5733;
+        button:hover {
+            background-color: darkred; /* Darker red on hover */
+        }
+        .confirmation-message, .error-message {
+            color: #00FF00; /* Green for messages */
+            margin: 10px 0;
+        }
+        pre {
+            background-color: #111;
+            color: #00FF00;
+            padding: 10px;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+        }
+        a {
+            color: #00FF00;
             text-decoration: none;
-            font-weight: 700;
         }
-
-        .admin-actions a:hover {
-            color: #C7442B;
-        }
-
-        /* Error and Confirmation Messages */
-        .error-message {
-            color: #FF5733; /* Error messages in red */
-            font-weight: bold;
-        }
-
-        .confirmation-message {
-            color: #32CD32; /* Green confirmation messages */
-            font-weight: bold;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            input, textarea, button {
-                font-size: 0.9rem;
-            }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
-
-    <!-- About Me Section -->
     <section>
         <h1>About Me</h1>
-        <p><span style="color: #FF5733;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime. 😊</p>
+        <p>Hello! My name is Bodvar. I'm 20 years old, and I'm a friendly person.</p>
     </section>
 
-    <!-- Success or Error Messages -->
     <?php if (isset($confirmation_message)) echo "<p class='confirmation-message'>$confirmation_message</p>"; ?>
     <?php if (isset($form_error)) echo "<p class='error-message'>$form_error</p>"; ?>
 
-    <!-- Message Form -->
     <section>
         <h2>Leave a Message</h2>
-        <form method="POST" action="">
+        <form method="POST">
             <input type="text" name="name" placeholder="Your Name" required>
             <input type="email" name="email" placeholder="Your Email" required>
             <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
@@ -223,60 +124,32 @@ if (isset($_GET['logout'])) {
         </form>
     </section>
 
-    <!-- Admin Panel for Viewing Messages -->
     <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
         <section>
             <h2>Admin - View Messages</h2>
-
             <?php
-            // Path to the messages file
             $file = "messages.txt";
-
-            // Check if the file exists and read the content
-            if (file_exists($file)) {
-                $messages = file_get_contents($file);
-            } else {
-                $messages = "No messages yet.";
-            }
-            echo '<pre>' . htmlspecialchars($messages) . '</pre>';
+            echo '<pre>' . htmlspecialchars(file_exists($file) ? file_get_contents($file) : "No messages yet.") . '</pre>';
             ?>
-
-            <div class="admin-actions">
-                <a href="?logout=true">Log out</a>
-            </div>
+            <a href="?logout=true">Log out</a>
         </section>
-
     <?php else: ?>
-
-        <!-- Admin Login -->
-        <section class="admin-login">
+        <section>
             <h2>Admin Login</h2>
-            <form method="POST" action="">
+            <form method="POST">
                 <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
                 <button type="submit">Login</button>
             </form>
             <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
         </section>
-
     <?php endif; ?>
 
+    <div dir="rtl" style="text-align: right; color: #00FF00;">
+        <p>إذا أبصرت قبرا من بعيد</p>
+        <p>وددت لو أنني مما يليه</p>
+        <p>ألا رحم المهيمن نفس حر</p>
+        <p>تصدق بالوفاة على أخيه</p>
+    </div>
 </div>
-
 </body>
-</html>
-
-
-
-        <p>
-          
-
-إذا أبصرت قبرا من بعيد
-<p>
-وددت لو أنني مما يليه
-<p>
-ألا رحم المهيمن نفس حر
-<p>
-تصدق بالوفاة على أخيه
-        </p>
-    </body>
 </html>
