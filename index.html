@@ -1,34 +1,40 @@
 <?php
-// Start PHP session for admin authentication
+// Start the session for admin login
 session_start();
 
-// Process the form when submitted
+// Process the form when it's submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['message'])) {
-    // Sanitize form data
-    $name = htmlspecialchars($_POST['name']);
-    $email = htmlspecialchars($_POST['email']);
-    $message = htmlspecialchars($_POST['message']);
-    
-    // Define the path to the message file (ensure the file is not publicly accessible)
-    $file = "messages.txt";
-    
-    // Format message content
-    $message_content = "Name: $name\nEmail: $email\nMessage: $message\n\n---\n\n";
-    
-    // Save to file (append the message to the text file)
-    file_put_contents($file, $message_content, FILE_APPEND);
-    
-    // Show a confirmation message
-    $confirmation_message = "<p>Thank you for your message! I will get back to you soon.</p>";
+    // Sanitize and validate form data to avoid issues
+    $name = htmlspecialchars(trim($_POST['name']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $message = htmlspecialchars(trim($_POST['message']));
+
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $form_error = "Invalid email format.";
+    } else {
+        // Define the path to the message file
+        $file = "messages.txt";
+
+        // Format the message content
+        $message_content = "Name: $name\nEmail: $email\nMessage: $message\n\n---\n\n";
+
+        // Save the message to the file (ensure proper file permissions are set)
+        file_put_contents($file, $message_content, FILE_APPEND);
+
+        // Display a confirmation message after submission
+        $confirmation_message = "Thank you for your message! We will get back to you soon.";
+    }
 }
 
 // Admin login handling
-$admin_password = "your_secure_password_here"; // Change this to a secure password
+$admin_password = "your_secure_password"; // Set a strong password
 
+// Check if admin password is submitted
 if (isset($_POST['admin_password'])) {
     if ($_POST['admin_password'] === $admin_password) {
         $_SESSION['admin_logged_in'] = true;
-        header("Location: ".$_SERVER['PHP_SELF']);
+        header("Location: " . $_SERVER['PHP_SELF']);
         exit;
     } else {
         $login_error = "Incorrect password. Please try again.";
@@ -38,10 +44,9 @@ if (isset($_POST['admin_password'])) {
 // Admin log out
 if (isset($_GET['logout'])) {
     session_destroy();
-    header("Location: ".$_SERVER['PHP_SELF']);
+    header("Location: " . $_SERVER['PHP_SELF']);
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -49,12 +54,12 @@ if (isset($_GET['logout'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
+    <title>Bodvar's Website</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #2C2F3D; /* Phantom Black */
-            color: #00FF00; /* Green */
+            color: #00FF00; /* Green text */
             margin: 0;
             padding: 0;
             display: flex;
@@ -64,7 +69,7 @@ if (isset($_GET['logout'])) {
             text-align: center;
         }
         h1 {
-            color: #FF0000; /* Red for important headings */
+            color: #FF0000; /* Red color for headings */
         }
         .container {
             background-color: #111; /* Dark background */
@@ -129,6 +134,10 @@ if (isset($_GET['logout'])) {
         .admin-actions a:hover {
             color: #f07d96;
         }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -136,10 +145,13 @@ if (isset($_GET['logout'])) {
 <div class="container">
 
     <h1>About Me</h1>
-    <p><span style="color: #FF0000;">Hello!</span> My name is Bodvar. I'm 20 years old and I’m a friendly person. Feel free to reach out to me anytime.</p>
+    <p><span style="color: #FF0000;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime.</p>
 
-    <!-- Display confirmation message if message was submitted -->
-    <?php if (isset($confirmation_message)) echo $confirmation_message; ?>
+    <!-- Show confirmation message if message was successfully submitted -->
+    <?php if (isset($confirmation_message)) echo "<p>$confirmation_message</p>"; ?>
+
+    <!-- Show error if form submission failed (e.g., invalid email) -->
+    <?php if (isset($form_error)) echo "<p class='error-message'>$form_error</p>"; ?>
 
     <!-- Message Form -->
     <h2>Leave a Message</h2>
@@ -155,7 +167,7 @@ if (isset($_GET['logout'])) {
         <h2>Admin - View Messages</h2>
 
         <?php
-        // File path to store messages
+        // Path to the messages file
         $file = "messages.txt";
 
         // Check if the file exists and read the content
@@ -179,7 +191,7 @@ if (isset($_GET['logout'])) {
                 <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
                 <button type="submit">Login</button>
             </form>
-            <?php if (isset($login_error)) echo "<p style='color:red;'>$login_error</p>"; ?>
+            <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
         </div>
 
     <?php endif; ?>
@@ -188,6 +200,7 @@ if (isset($_GET['logout'])) {
 
 </body>
 </html>
+
 
 
         <p>
