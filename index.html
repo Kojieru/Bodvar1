@@ -1,186 +1,47 @@
-<?php
-// Start the session
-session_start();
-
-// Admin password (use hashing for production)
-$admin_password = "iluvcig";
-
-// Handle form submissions
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['message'])) {
-    $name = htmlspecialchars(trim($_POST['name']));
-    $email = htmlspecialchars(trim($_POST['email']));
-    $message = htmlspecialchars(trim($_POST['message']));
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $form_error = "Invalid email format.";
-    } else {
-        $file = "messages.txt";
-        $message_content = "Name: $name\nEmail: $email\nMessage: $message\n\n---\n\n";
-
-        if (file_put_contents($file, $message_content, FILE_APPEND)) {
-            $confirmation_message = "Thank you for your message! We will get back to you soon.";
-        } else {
-            $form_error = "Failed to save your message. Please try again later.";
-        }
-    }
-}
-
-// Admin login
-if (isset($_POST['admin_password'])) {
-    if ($_POST['admin_password'] === $admin_password) {
-        $_SESSION['admin_logged_in'] = true;
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit;
-    } else {
-        $login_error = "Incorrect password.";
-    }
-}
-
-// Admin logout
-if (isset($_GET['logout'])) {
-    session_destroy();
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Bodvar's Website</title>
-    <style>
-        body {
-            background-color: #000; /* Black background */
-            color: #00FF00; /* Green text */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        h1, h2 {
-            color: #00FF00; /* Green text for headers */
-        }
-        .container {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-        }
-        input, textarea {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #00FF00;
-            background-color: #000;
-            color: #00FF00;
-            border-radius: 5px;
-        }
-        button {
-            background-color: red; /* Red buttons */
-            color: #FFF;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: darkred; /* Darker red on hover */
-        }
-        .confirmation-message, .error-message {
-            color: #00FF00; /* Green for messages */
-            margin: 10px 0;
-        }
-        pre {
-            background-color: #111;
-            color: #00FF00;
-            padding: 10px;
-            border: 1px solid #00FF00;
-            border-radius: 5px;
-        }
-        a {
-            color: #00FF00;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <section>
-        <h1>About Me</h1>
-        <p>Hello! My name is Bodvar. I'm 20 years old, and I'm a friendly person.</p>
-    </section>
-
-    <?php if (isset($confirmation_message)) echo "<p class='confirmation-message'>$confirmation_message</p>"; ?>
-    <?php if (isset($form_error)) echo "<p class='error-message'>$form_error</p>"; ?>
-
-    <section>
-        <h2>Leave a Message</h2>
-        <form method="POST">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
-
-    <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
-        <section>
-            <h2>Admin - View Messages</h2>
-            <?php
-            $file = "messages.txt";
-            echo '<pre>' . htmlspecialchars(file_exists($file) ? file_get_contents($file) : "No messages yet.") . '</pre>';
-            ?>
-            <a href="?logout=true">Log out</a>
-        </section>
-    <?php else: ?>
-        <section>
-            <h2>Admin Login</h2>
-            <form method="POST">
-                <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
-                <button type="submit">Login</button>
-            </form>
-            <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
-        </section>
-    <?php endif; ?>
-
-    <div dir="rtl" style="text-align: right; color: #00FF00;">
-        <p>إذا أبصرت قبرا من بعيد</p>
-        <p>وددت لو أنني مما يليه</p>
-        <p>ألا رحم المهيمن نفس حر</p>
-        <p>تصدق بالوفاة على أخيه</p>
-    </div>
-</div>
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bodvar's Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
     <style>
         /* General Styles */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
-            color: #00FF00; /* Green text color */
-            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            background-color: #1C1C1C; /* Phantom Black background */
+            color: #00FF00; /* Green text */
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1, h2 {
+            color: #00FF00; /* Green color for headings */
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .container {
+            background-color: #1C1C1C; /* Phantom Black container */
             padding: 40px;
-            background-color: #1F1F1F;
-            border-radius: 10px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
         }
 
+        /* Section Styling */
+        section {
+            margin-bottom: 30px;
+        }
+
+        /* Comment Form Styles */
         form {
             display: flex;
             flex-direction: column;
@@ -188,75 +49,201 @@ if (isset($_GET['logout'])) {
         }
 
         input, textarea {
-            padding: 10px;
-            font-size: 16px;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 8px;
             border: 1px solid #444;
-            border-radius: 5px;
             background-color: #2C2C2C;
-            color: #00FF00;
+            color: #00FF00; /* Green text inside the form */
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #FF5733; /* Highlight input fields with red */
+            outline: none;
         }
 
         button {
-            padding: 10px;
-            font-size: 16px;
-            background-color: red;
+            padding: 15px;
+            font-size: 1rem;
+            background-color: #FF5733;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: darkred;
+            background-color: #C7442B; /* Darken button on hover */
+        }
+
+        /* Comment Display */
+        .comment {
+            background-color: #2C2C2C;
+            color: #00FF00; /* Green text for comments */
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .comment h3 {
+            color: #FF5733; /* Heading color for comment author */
+            font-size: 1.2rem;
+        }
+
+        /* Admin Login Form */
+        .admin-login {
+            margin-top: 20px;
+        }
+
+        .admin-login input {
+            margin-bottom: 15px;
+        }
+
+        .admin-login button {
+            width: 100%;
+        }
+
+        /* Admin Actions */
+        .admin-actions {
+            margin-top: 20px;
+        }
+
+        .admin-actions a {
+            color: #FF5733;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .admin-actions a:hover {
+            color: #C7442B;
+        }
+
+        /* Error and Confirmation Messages */
+        .error-message {
+            color: #FF5733; /* Error messages in red */
+            font-weight: bold;
+        }
+
+        .confirmation-message {
+            color: #32CD32; /* Green confirmation messages */
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input, textarea, button {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Contact Me</h1>
-        <form id="contact-form">
-            <input type="text" id="name" placeholder="Your Name" required>
-            <input type="email" id="email" placeholder="Your Email" required>
-            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
+
+<div class="container">
+
+    <!-- About Me Section -->
+    <section>
+        <h1>About Me</h1>
+        <p><span style="color: #FF5733;">Hello!</span> My name is Bodvar. I'm 20 years old, and I'm a friendly person. Feel free to reach out anytime. </p>
+    </section>
+
+    <!-- Comment Section -->
+    <section>
+        <h2>Leave a Comment</h2>
+        <form method="POST" action="">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <textarea name="comment" rows="5" placeholder="Your Comment" required></textarea>
+            <button type="submit">Post Comment</button>
         </form>
-        <p id="response-message" style="margin-top: 20px; color: #00FF00;"></p>
-    </div>
+    </section>
 
-    <!-- EmailJS Script -->
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-    <script>
-        // Initialize EmailJS
-        emailjs.init("44e3fT6WiFS227oem"); // Your public key
+    <!-- Display Comments -->
+    <section>
+        <h2>Comments</h2>
+        <?php
+        // Path to the comments file
+        $file = "comments.txt";
 
-        // Handle Form Submission
-        document.getElementById("contact-form").addEventListener("submit", function(event) {
-            event.preventDefault(); // Prevent the default form submission behavior
+        // Check if the file exists and read the content
+        if (file_exists($file)) {
+            $comments = file_get_contents($file);
+            $comments = explode("\n---\n", $comments); // Split the comments based on separator
 
-            // Collect form data
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const message = document.getElementById("message").value;
-
-            // Use EmailJS to send the email
-            emailjs.send("service_Bodvar", "template_4r00ffi", {
-                to_name: "Bodvar",
-                from_name: name,
-                from_email: email,
-                message: message
-            }).then(
-                function(response) {
-                    document.getElementById("response-message").textContent = "Message sent successfully!";
-                },
-                function(error) {
-                    document.getElementById("response-message").textContent = "Failed to send the message. Please try again.";
+            // Display each comment
+            foreach ($comments as $comment) {
+                if (!empty(trim($comment))) {
+                    echo '<div class="comment">' . nl2br(htmlspecialchars($comment)) . '</div>';
                 }
-            );
+            }
+        } else {
+            echo "<p>No comments yet.</p>";
+        }
+        ?>
+    </section>
 
-            // Clear the form fields
-            document.getElementById("contact-form").reset();
-        });
-    </script>
+    <!-- Admin Panel for Viewing Messages -->
+    <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in']): ?>
+        <section>
+            <h2>Admin - View Messages</h2>
+
+            <?php
+            // Path to the messages file
+            $file = "messages.txt";
+
+            // Check if the file exists and read the content
+            if (file_exists($file)) {
+                $messages = file_get_contents($file);
+            } else {
+                $messages = "No messages yet.";
+            }
+            echo '<pre>' . htmlspecialchars($messages) . '</pre>';
+            ?>
+
+            <div class="admin-actions">
+                <a href="?logout=true">Log out</a>
+            </div>
+        </section>
+
+    <?php else: ?>
+
+        <!-- Admin Login -->
+        <section class="admin-login">
+            <h2>Admin Login</h2>
+            <form method="POST" action="">
+                <input type="password" name="admin_password" placeholder="Enter Admin Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <?php if (isset($login_error)) echo "<p class='error-message'>$login_error</p>"; ?>
+        </section>
+
+    <?php endif; ?>
+
+</div>
+
 </body>
+    <p>
+          
+
+إذا أبصرت قبرا من بعيد
+<p>
+وددت لو أنني مما يليه
+<p>
+ألا رحم المهيمن نفس حر
+<p>
+تصدق بالوفاة على أخيه
+        </p>
+    <p>
+    </body>
 </html>
