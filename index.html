@@ -22,8 +22,8 @@
 
         /* Background text effect */
         body::before {
-            content: "@Bodvvarr@ ";
-            color: #00FF00; /* Ensure background text is green */
+            content: "Bodvvarr ".repeat(100); /* Repeat Bodvvarr 100 times */
+            color: #00FF00; /* Green text */
             font-size: 1.5rem; /* Adjust size for visual effect */
             line-height: 2rem; /* Proper spacing between lines */
             opacity: 0.1; /* Make the background less intense */
@@ -37,6 +37,7 @@
             white-space: pre-wrap;
             display: flex;
             flex-wrap: wrap;
+            justify-content: flex-start;
             align-content: flex-start;
         }
 
@@ -73,3 +74,4 @@
     </div>
 </body>
 </html>
+
