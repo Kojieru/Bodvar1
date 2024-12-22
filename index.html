@@ -2,9 +2,12 @@
 // Start the session for admin login
 session_start();
 
-// Process the form when it's submitted
+// Admin password
+$admin_password = "iluvcig"; // Set the admin password
+
+// Process the message form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['message'])) {
-    // Sanitize and validate form data to avoid issues
+    // Sanitize and validate form data
     $name = htmlspecialchars(trim($_POST['name']));
     $email = htmlspecialchars(trim($_POST['email']));
     $message = htmlspecialchars(trim($_POST['message']));
@@ -28,9 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['message'])) {
 }
 
 // Admin login handling
-$admin_password = "your_secure_password"; // Set a strong password
-
-// Check if admin password is submitted
 if (isset($_POST['admin_password'])) {
     if ($_POST['admin_password'] === $admin_password) {
         $_SESSION['admin_logged_in'] = true;
